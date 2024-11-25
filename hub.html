@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .editable {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+        .editable:focus {
+            outline: none;
+            border-color: #FF9800;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <img src="./letter-l-logo.png" alt="Logo" class="header-logo">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a id="hubLink" href="hub.html">Hub</a></li>
+            <li><a href="https://github.com/your-github-profile" target="_blank">LuciaHub</a></li>
+            <li id="userGreeting"></li>
+        </ul>
+    </nav>
+</header>
+<aside class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+        <li><a href="projects.html">Проекты</a></li>
+        <li><a href="files.html">Файлы</a></li>
+        <li><a href="activity.html">Активность</a></li>
+        <li><a href="missions.html">Миссии</a></li>
+        <li><a href="goals.html">Цели</a></li>
+        <li><a href="charts.html">Графики</a></li>
+    </ul>
+</aside>
+<div class="hub-container">
+    <h1>Welcome to the <a href="https://rt.pornhub.com/view_video.php?viewkey=671605eb63885">Hub</a>, <span id="username"></span>!</h1>
+    <p>This is your personal hub space.</p>
+    <button id="logoutBtn">Logout</button>
+    
+    <details class="info-section">
+        <summary>Information Section 1</summary>
+        <div id="section1Text" class="editable" contenteditable="true"></div>
+        <button onclick="saveSection('section1Text')">Save</button>
+    </details>
+    
+    <details class="info-section">
+        <summary>Information Section 2</summary>
+        <div id="section2Text" class="editable" contenteditable="true"></div>
+        <button onclick="saveSection('section2Text')">Save</button>
+    </details>
+</div>
+
+<footer>
+    <p>&copy; 2024 Lucia Hub. All rights reserved.</p>
+    <p>Contact: <a href="mailto:luzanvladmarat@gmail.com">luzanvladmarat@gmail.com</a></p>
+</footer>
+
+<script>
+    var currentUser = localStorage.getItem('currentUser');
+    
+    var userGreeting = document.getElementById('userGreeting');
+    if (currentUser) {
+        userGreeting.textContent = `Hello, ${currentUser}`;
+    }
+
+    var usernameSpan = document.getElementById('username');
+    usernameSpan.textContent = currentUser || 'Guest';
+
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+    });
+
+    document.getElementById('section1Text').innerHTML = localStorage.getItem('section1Text') || '';
+    document.getElementById('section2Text').innerHTML = localStorage.getItem('section2Text') || '';
+
+    function saveSection(sectionId) {
+        var content = document.getElementById(sectionId).innerHTML;
+        localStorage.setItem(sectionId, content);
+        alert('Section content saved!');
+    }
+
+    var importedContent = localStorage.getItem('importedFileContent');
+    if (importedContent) {
+        document.getElementById('fileContent').innerHTML = importedContent;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Hub - Authentication</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <img src="./letter-l-logo.png" alt="Logo" class="header-logo">
+                <li><a href="index.html">Home</a></li>
+                <li><a id="hubLink" href="hub.html">Hub</a></li>
+                <li id="userGreeting"></li>
+                <li><button id="logoutBtn" style="display: none;">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="auth-container">
+        <h2 id="formTitle">Welcome</h2>
+        <form id="authForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit" id="submitBtn">Login</button>
+        </form>
+        <p class="switch-form" id="switchForm">Don't have an account? <b style="color: #FF9800;">Register</b></p>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        let isLoginForm = true;
+        const formTitle = document.getElementById('formTitle');
+        const submitBtn = document.getElementById('submitBtn');
+        const switchForm = document.getElementById('switchForm');
+        const message = document.getElementById('message');
+        const userGreeting = document.getElementById('userGreeting');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const hubLink = document.getElementById('hubLink');
+
+        function toggleForm() {
+            isLoginForm = !isLoginForm;
+            formTitle.textContent = isLoginForm ? 'Login' : 'Register';
+            submitBtn.textContent = isLoginForm ? 'Login' : 'Register';
+            switchForm.textContent = isLoginForm ? "Don't have an account? Register" : "Already have an account? Login";
+            message.textContent = '';
+        }
+
+        switchForm.addEventListener('click', toggleForm);
+
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            //login
+            if (isLoginForm) {
+                const users = JSON.parse(localStorage.getItem('users')) || {};
+                if (users[username] && users[username] === password) {
+                    localStorage.setItem('currentUser', username);
+                    window.location.href = 'hub.html';
+                } else {
+                    message.textContent = 'Invalid username or password';
+                }
+            } else {
+                // regiiii
+                const users = JSON.parse(localStorage.getItem('users')) || {};
+                if (users[username]) {
+                    message.textContent = 'Username already exists';
+                } else {
+                    users[username] = password;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    localStorage.setItem('currentUser', username);
+                    window.location.href = 'hub.html';
+                }
+            }
+        });
+
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            userGreeting.textContent = `Hello, ${currentUser}`;
+            logoutBtn.style.display = 'inline';
+            hubLink.style.display = 'inline';
+        } else {
+            hubLink.style.display = 'none';
+        }
+
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+    </script>
+    <footer>
+        <p>&copy; 2024 Lucia Hub. All rights reserved.</p>
+        <p>Contact: <a href="mailto:luzanvladmarat@gmail.com">luzanvladmarat@gmail.com</a></p>
+    </footer>
+</body>
+</html>
